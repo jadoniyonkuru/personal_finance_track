@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinanceRW — Personal Finance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Sidebar nav ── -->
+  <nav class="sidebar">
+    <div class="logo">
+      <span class="logo-icon">₣</span>
+      <span class="logo-text">finance</span>
+    </div>
+    <ul class="nav-list">
+      <li><a class="nav-link" data-nav="dashboard" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </a></li>
+      <li><a class="nav-link" data-nav="transactions" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Transactions
+      </a></li>
+      <li><a class="nav-link" data-nav="budgets" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Budgets
+      </a></li>
+      <li><a class="nav-link" data-nav="pots" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10H2A10 10 0 0 1 12 2z"/><path d="M7 12v6a5 5 0 0 0 10 0v-6"/><line x1="12" y1="2" x2="12" y2="4"/></svg>
+        Pots
+      </a></li>
+      <li><a class="nav-link" data-nav="recurring-bills" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Recurring bills
+      </a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <a href="#" class="minimize-link">Minimize Menu</a>
+    </div>
+  </nav>
+
+  <!-- ── Main content ── -->
+  <main class="main">
+
+    <!-- Dashboard -->
+    <section id="page-dashboard" class="page">
+      <header class="page-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="page-subtitle">Your financial overview for this month</p>
+        </div>
+      </header>
+      <div id="dashboard-content"></div>
+    </section>
+
+    <!-- Transactions -->
+    <section id="page-transactions" class="page" hidden>
+      <header class="page-header">
+        <div>
+          <h1>Transactions</h1>
+          <p class="page-subtitle">All activity this month</p>
+        </div>
+        <button class="btn-primary" data-modal-open="modal-add-tx">+ Add transaction</button>
+      </header>
+      <div id="tx-list" class="tx-list"></div>
+    </section>
+
+    <!-- Budgets -->
+    <section id="page-budgets" class="page" hidden>
+      <header class="page-header">
+        <div>
+          <h1>Budgets</h1>
+          <p class="page-subtitle">Track spending limits by category</p>
+        </div>
+        <button class="btn-primary" data-modal-open="modal-add-budget">+ Add budget</button>
+      </header>
+      <div id="budget-list" class="budget-grid"></div>
+    </section>
+
+    <!-- Savings Pots -->
+    <section id="page-pots" class="page" hidden>
+      <header class="page-header">
+        <div>
+          <h1>Savings Pots</h1>
+          <p class="page-subtitle">Save towards your goals</p>
+        </div>
+        <button class="btn-primary" data-modal-open="modal-add-pot">+ New pot</button>
+      </header>
+      <div id="pots-list" class="pots-grid"></div>
+    </section>
+
+    <!-- Recurring Bills -->
+    <section id="page-recurring-bills" class="page" hidden>
+      <header class="page-header">
+        <div>
+          <h1>Recurring Bills</h1>
+          <p class="page-subtitle">Manage your recurring expenses</p>
+        </div>
+        <button class="btn-primary" data-modal-open="modal-add-recurring">+ Add recurring bill</button>
+      </header>
+      <div id="recurring-list" class="recurring-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- ── Modals ── -->
+
+  <!-- Add transaction -->
+  <div id="modal-add-tx" class="modal-backdrop" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add transaction</h2>
+        <button class="btn-icon" data-modal-close="modal-add-tx">✕</button>
+      </div>
+      <form id="tx-form" class="form">
+        <label>Title
+          <input type="text" name="title" required placeholder="e.g. Groceries" />
+        </label>
+        <div class="form-row">
+          <label>Amount (RWF)
+            <input type="number" name="amount" required min="1" placeholder="0" />
+          </label>
+          <label>Type
+            <select name="type" required>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Category
+            <select name="category" required>
+              <option value="food">Food</option>
+              <option value="transport">Transport</option>
+              <option value="housing">Housing</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="health">Health</option>
+              <option value="shopping">Shopping</option>
+              <option value="education">Education</option>
+              <option value="income">Income</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>Date
+            <input type="date" name="date" required />
+          </label>
+        </div>
+        <label>Note (optional)
+          <input type="text" name="note" placeholder="Optional note" />
+        </label>
+        <button type="submit" class="btn-primary full-width">Save transaction</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add budget -->
+  <div id="modal-add-budget" class="modal-backdrop" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Set budget</h2>
+        <button class="btn-icon" data-modal-close="modal-add-budget">✕</button>
+      </div>
+      <form id="budget-form" class="form">
+        <label>Category
+          <select name="category" required>
+            <option value="food">Food</option>
+            <option value="transport">Transport</option>
+            <option value="housing">Housing</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="health">Health</option>
+            <option value="shopping">Shopping</option>
+            <option value="education">Education</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>Monthly limit (RWF)
+          <input type="number" name="limit" required min="1" placeholder="e.g. 80000" />
+        </label>
+        <button type="submit" class="btn-primary full-width">Save budget</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add pot -->
+  <div id="modal-add-pot" class="modal-backdrop" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create savings pot</h2>
+        <button class="btn-icon" data-modal-close="modal-add-pot">✕</button>
+      </div>
+      <form id="pot-form" class="form">
+        <div class="form-row">
+          <label>Emoji
+            <input type="text" name="emoji" placeholder="💰" maxlength="2" />
+          </label>
+          <label style="flex:3">Name
+            <input type="text" name="name" required placeholder="e.g. Emergency fund" />
+          </label>
+        </div>
+        <label>Target amount (RWF)
+          <input type="number" name="target" required min="1" placeholder="e.g. 500000" />
+        </label>
+        <label>Colour
+          <input type="color" name="color" value="#4f7eff" />
+        </label>
+        <button type="submit" class="btn-primary full-width">Create pot</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add recurring bill -->
+  <div id="modal-add-recurring" class="modal-backdrop" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add recurring bill</h2>
+        <button class="btn-icon" data-modal-close="modal-add-recurring">✕</button>
+      </div>
+      <form id="recurring-form" class="form">
+        <label>Title
+          <input type="text" name="title" required placeholder="e.g. Netflix subscription" />
+        </label>
+        <div class="form-row">
+          <label>Amount (RWF)
+            <input type="number" name="amount" required min="1" placeholder="0" />
+          </label>
+          <label>Frequency
+            <select name="frequency" required>
+              <option value="monthly">Monthly</option>
+              <option value="weekly">Weekly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </label>
+        </div>
+        <label>Category
+          <select name="category" required>
+            <option value="food">Food</option>
+            <option value="transport">Transport</option>
+            <option value="housing">Housing</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="health">Health</option>
+            <option value="shopping">Shopping</option>
+            <option value="education">Education</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>Next due date
+          <input type="date" name="nextDue" required />
+        </label>
+        <button type="submit" class="btn-primary full-width">Add recurring bill</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="dist/app.js"></script>
+</body>
+</html>
